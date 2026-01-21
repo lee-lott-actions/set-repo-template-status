@@ -6,7 +6,7 @@ Describe "Set-TemplateRepository" {
         $script:Owner       = "test-owner"
         $script:Token       = "fake-token"
         $script:MockApiUrl  = "http://127.0.0.1:3000"
-        . "$PSScriptRoot/../Set-TemplateRepository.ps1"
+        . "$PSScriptRoot/../action.ps1"
     }
     BeforeEach {
         $env:GITHUB_OUTPUT = "$PSScriptRoot/github_output.temp"
