@@ -28,7 +28,7 @@ try {
             $responseJson = @{ status = "ok" } | ConvertTo-Json
         }
         # PATCH /repos/:owner/:repo
-        if ($method -eq "PATCH" -and $path -match '^/repos/([^/]+)/([^/]+)$') {
+        elseif ($method -eq "PATCH" -and $path -match '^/repos/([^/]+)/([^/]+)$') {
             $owner = $Matches[1]
             $repo = $Matches[2]
             
