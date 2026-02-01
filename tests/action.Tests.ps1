@@ -80,4 +80,17 @@ Describe "Set-TemplateRepository" {
         $output | Should -Contain "result=failure"
         $output | Should -Contain "error-message=Missing required parameters: RepoName, IsTemplate, Owner, and Token must be provided."
     }
+	
+	It "writes result=failure and error-message on exception" {
+		Mock Invoke-WebRequest { throw "API Error" }
+
+		try {
+			Set-TemplateRepository -RepoName $RepoName -IsTemplate "true" -Owner $Owner -Token $Token
+		} catch {}
+
+		$output = Get-Content $env:GITHUB_OUTPUT
+		$output | Should -Contain "result=failure"
+		$output | Where-Object { $_ -match "^error-message=Error: Failed to set $RepoName to template status true\. Exception:" } |
+			Should -Not -BeNullOrEmpty
+	}
 }
