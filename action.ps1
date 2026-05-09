@@ -36,11 +36,10 @@ function Set-TemplateRepository {
     $uri = "$apiBaseUrl/repos/$Owner/$RepoName"
 
     $headers = @{
-        Authorization        = "Bearer $Token"
-        Accept               = "application/vnd.github+json"
-        "X-GitHub-Api-Version" = "2022-11-28"
-        "User-Agent"         = "pwsh-action"
-        "Content-Type"       = "application/json"
+        Authorization = "Bearer $Token"
+        Accept = "application/vnd.github+json"        
+		"X-GitHub-Api-Version" = "2026-03-10"
+		"Content-Type" = "application/json"
     }
 
     $jsonBody = @{ is_template = [bool]::Parse($IsTemplate) } | ConvertTo-Json
