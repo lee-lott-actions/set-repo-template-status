@@ -47,7 +47,7 @@ Describe "Set-TemplateRepository" {
 	        Set-TemplateRepository -RepoName $RepoName -IsTemplate "true" -Owner $Owner -Token $Token
 	        $output = Get-Content $env:GITHUB_OUTPUT
 	        $output | Should -Contain "result=failure"
-	        $output | Should -Contain "error-message=Error: Failed to set repository to template status true. HTTP Status: 404"
+	        $output | Should -Contain "error-message=Error: Failed to set test-repo to template status true. HTTP Status: 404"
 	    }
 	}
 
@@ -56,7 +56,7 @@ Describe "Set-TemplateRepository" {
 	        Set-TemplateRepository -RepoName $RepoName -IsTemplate "invalid-value" -Owner $Owner -Token $Token
 	        $output = Get-Content $env:GITHUB_OUTPUT
 	        $output | Should -Contain "result=failure"
-	        $output | Should -Contain "error-message=Invalid IsTemplate value 'invalid-value'. Must be 'true' or 'false'."
+	        $output | Should -Contain "error-message=Error: Invalid IsTemplate value 'invalid-value'. Must be 'true' or 'false'."
 	    }
 	
 	    It "unit: Set-TemplateRepository fails with empty RepoName" {
