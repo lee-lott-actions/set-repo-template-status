@@ -22,13 +22,12 @@ function Set-TemplateRepository {
 
     # Validate IsTemplate value
     if ($IsTemplate -ne "true" -and $IsTemplate -ne "false") {
-        Write-Output "Error: Invalid IsTemplate value '$IsTemplate'. Must be 'true' or 'false'."
-        Add-Content -Path $env:GITHUB_OUTPUT -Value "error-message=Invalid IsTemplate value '$IsTemplate'. Must be 'true' or 'false'."
+		$errorMsg = "Error: Invalid IsTemplate value '$IsTemplate'. Must be 'true' or 'false'."
+        Write-Output $errorMsg
+        Add-Content -Path $env:GITHUB_OUTPUT -Value "error-message=$errorMsg"
         Add-Content -Path $env:GITHUB_OUTPUT -Value "result=failure"
         return
-    }
-
-    Write-Host "Attempting to set repository '$RepoName' to template status '$IsTemplate' for owner '$Owner'"
+    }    
 
     # Use MOCK_API if set, otherwise default to GitHub API
     $apiBaseUrl = $env:MOCK_API
@@ -45,16 +44,17 @@ function Set-TemplateRepository {
     $jsonBody = @{ is_template = [bool]::Parse($IsTemplate) } | ConvertTo-Json
 
     try {
-        Write-Host "Sending PATCH request to $uri"
+		Write-Host "Attempting to set repository '$RepoName' to template status '$IsTemplate' for owner '$Owner'"
         $response = Invoke-WebRequest -Uri $uri -Headers $headers -Method Patch -Body $jsonBody
 
         if ($response.StatusCode -eq 200) {
             Write-Host "Successfully set $RepoName to template status $IsTemplate"
             Add-Content -Path $env:GITHUB_OUTPUT -Value "result=success"
         } else {
-            Write-Host "Error: Failed to set $RepoName to template status $IsTemplate. HTTP Status: $($response.StatusCode)"
-            Add-Content -Path $env:GITHUB_OUTPUT -Value "error-message=Failed to set repository to template status $IsTemplate. HTTP Status: $($response.StatusCode)"
+			$errorMsg = "Error: Failed to set $RepoName to template status $IsTemplate. HTTP Status: $($response.StatusCode)" 
             Add-Content -Path $env:GITHUB_OUTPUT -Value "result=failure"
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "error-message=$errorMsg"            
+			Write-Host $errorMsg
         }
     } catch {
 		$errorMsg = "Error: Failed to set $RepoName to template status $IsTemplate. Exception: $($_.Exception.Message)"
