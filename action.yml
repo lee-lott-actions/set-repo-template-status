@@ -31,5 +31,9 @@ runs:
       id: action
       shell: pwsh
       run: |
-        . "${{ github.action_path }}/action.ps1"
-        Set-TemplateRepository "${{ inputs.repo-name }}"  "${{ inputs.is-template }}" "${{ inputs.owner }}" "${{ inputs.token }}"
+        . "${{ github.action_path }}/action.ps1"        
+        Set-TemplateRepository `
+          -RepoName "${{ inputs.repo-name }}" `
+          -IsTemplate  "${{ inputs.is-template }}" `
+          -Owner "${{ inputs.owner }}" `
+          -Token "${{ inputs.token }}"
