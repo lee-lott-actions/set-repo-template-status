@@ -45,7 +45,7 @@ function Set-TemplateRepository {
 
     try {
 		Write-Host "Attempting to set repository '$RepoName' to template status '$IsTemplate' for owner '$Owner'"
-        $response = Invoke-WebRequest -Uri $uri -Headers $headers -Method Patch -Body $jsonBody
+        $response = Invoke-WebRequest -Uri $uri -Headers $headers -Method Patch -Body $jsonBody -SkipHttpErrorCheck
 
         if ($response.StatusCode -eq 200) {
             Write-Host "Successfully set $RepoName to template status $IsTemplate"
