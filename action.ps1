@@ -1,6 +1,7 @@
 function Set-TemplateRepository {
     param(
         [string]$RepoName,
+		[ValidateSet("true", "false")]
         [string]$IsTemplate,
         [string]$Owner,
         [string]$Token
@@ -19,15 +20,6 @@ function Set-TemplateRepository {
 
     # Convert IsTemplate to lowercase for API compatibility
     $IsTemplate = $IsTemplate.ToLower()
-
-    # Validate IsTemplate value
-    if ($IsTemplate -ne "true" -and $IsTemplate -ne "false") {
-		$errorMsg = "Error: Invalid IsTemplate value '$IsTemplate'. Must be 'true' or 'false'."
-        Write-Output $errorMsg
-        Add-Content -Path $env:GITHUB_OUTPUT -Value "error-message=$errorMsg"
-        Add-Content -Path $env:GITHUB_OUTPUT -Value "result=failure"
-        return
-    }    
 
     # Use MOCK_API if set, otherwise default to GitHub API
     $apiBaseUrl = $env:MOCK_API

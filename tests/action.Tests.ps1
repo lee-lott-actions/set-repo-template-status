@@ -52,13 +52,6 @@ Describe "Set-TemplateRepository" {
 	}
 
 	Context "Parameter Validation Failure Cases" {
-		It "unit: Set-TemplateRepository fails with invalid is_template value" {
-	        Set-TemplateRepository -RepoName $RepoName -IsTemplate "invalid-value" -Owner $Owner -Token $Token
-	        $output = Get-Content $env:GITHUB_OUTPUT
-	        $output | Should -Contain "result=failure"
-	        $output | Should -Contain "error-message=Error: Invalid IsTemplate value 'invalid-value'. Must be 'true' or 'false'."
-	    }
-	
 	    It "unit: Set-TemplateRepository fails with empty RepoName" {
 	        Set-TemplateRepository -RepoName "" -IsTemplate "true" -Owner $Owner -Token $Token
 	        $output = Get-Content $env:GITHUB_OUTPUT
@@ -66,12 +59,17 @@ Describe "Set-TemplateRepository" {
 	        $output | Should -Contain "error-message=Missing required parameters: RepoName, IsTemplate, Owner, and Token must be provided."
 	    }
 	
-	    It "unit: Set-TemplateRepository fails with empty IsTemplate" {
-	        Set-TemplateRepository -RepoName $RepoName -IsTemplate "" -Owner $Owner -Token $Token
-	        $output = Get-Content $env:GITHUB_OUTPUT
-	        $output | Should -Contain "result=failure"
-	        $output | Should -Contain "error-message=Missing required parameters: RepoName, IsTemplate, Owner, and Token must be provided."
-	    }
+        It "unit: Set-TemplateRepository throws exception if IsTemplate is empty" {
+            { 
+				Set-TemplateRepository -RepoName $RepoName -IsTemplate "" -Owner $Owner -Token $Token
+            } | Should -Throw
+        }
+
+        It "unit: Set-TemplateRepository throws exception if IsTemplate is not valid" {
+            { 
+				Set-TemplateRepository -RepoName $RepoName -IsTemplate "invalid-value" -Owner $Owner -Token $Token
+            } | Should -Throw
+        }		
 	
 	    It "unit: Set-TemplateRepository fails with empty Owner" {
 	        Set-TemplateRepository -RepoName $RepoName -IsTemplate "true" -Owner "" -Token $Token
